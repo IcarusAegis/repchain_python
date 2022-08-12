@@ -13,7 +13,7 @@ cors = CORS(app)
 url='http://192.168.100.129:8081'
 jks_file_path=[]
 
-@app.route("/",methods=["GET"])  # 装饰器，url，路由
+@app.route("/chain_info",methods=["GET"])  # 装饰器，url，路由
 def get_chain_info():
     info=chaininfo.get_chain_info(url)
     return jsonify(eval(info.content))
