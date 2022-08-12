@@ -11,7 +11,8 @@ app = Flask(__name__)  # 在当前文件下创建应用
 
 cors = CORS(app)
 url='http://192.168.100.129:8081'
-jks_file_path=''
+jks_file_path=[]
+
 @app.route("/",methods=["GET"])  # 装饰器，url，路由
 def get_chain_info():
     info=chaininfo.get_chain_info(url)
@@ -30,6 +31,7 @@ def get_block_info():
     res=chaininfo.block_info_process(info)
     # print(info)
     return jsonify(res)
+
 @app.route('/upload_jks',methods=["POST"])
 def upload_jks():
     data=request.files['file']#接受传来的jks文件
@@ -38,20 +40,23 @@ def upload_jks():
     else:
         name=data.filename
         print(data)
-        global jks_file_path
-        jks_file_path=str(r'../certs/'+name)
+        # global jks_file_path
+        jks_file_path.append(str('../certs/'+name))
+        print('jks_file_path',jks_file_path)
         data.save(r'../certs/'+name)
         return "上传成功"
 
 #必须先执行upload_jks，才能执行submit_transinfo
 @app.route('/submit_transinfo',methods=["POST"])
 def submit_transinfo():
+    # global jks_file_path
     data=request.get_json()#接收表单的信息
     # print(data)
     args=chaininfo.args_info_process(data)#获取交易参数
     # print(args)
     # print(data['password'])
-    pem_path=chaininfo.convert_jks2pem(jks_file_path,data['pem_password'])#转换jks文件到pem文件
+    print('jks_file_path', jks_file_path[0])
+    pem_path=chaininfo.convert_jks2pem(jks_file_path[0],data['password'])#转换jks文件到pem文件
     # print('pem_path',pem_path)
 
     #加一个jks文件中不存在credit_code,credit_name的情况，判断传来的里面是否有这个，没有的话再根据文件名获取。
@@ -75,8 +80,8 @@ def submit_transinfo():
         return flag
     else:
         return 'success'
-    global jks_file_path
-    jks_file_path = ''
+    jks_file_path.pop(0)
+    print('jks_file_path', jks_file_path)
 #jks转换pem没问题了
 #8.11做jks页面上的上传和密码填写
 
