@@ -10,7 +10,7 @@ import postTranByString as trans
 app = Flask(__name__)  # 在当前文件下创建应用
 
 cors = CORS(app)
-url='http://192.168.100.129:8081'
+url='http://192.168.100.132:8081'
 jks_file_path=[]
 
 @app.route("/chain_info",methods=["GET"])  # 装饰器，url，路由
@@ -66,7 +66,7 @@ def submit_transinfo():
 
     credit_code,credit_name=pathlib.Path(pem_path).stem.split('.')#从pem文件名中提取信息
 
-    client=trans.Client(host='192.168.100.129:8081',pem_path=pem_path,credit_code=credit_code,cert_name=credit_name,password=None)#选择证书地址等 问题 密码加密
+    client=trans.Client(host='192.168.100.132:8081',pem_path=pem_path,credit_code=credit_code,cert_name=credit_name,password=None)#选择证书地址等 问题 密码加密
     tran_info=client.create_trans_invoke(data['trans_id'],data['chaincode_name'],data['chaincode_ver'],data['func_name'],json.dumps(args))#创建交易信息
     # print(tran_info)
     res=client.postTranByString(tran_info)

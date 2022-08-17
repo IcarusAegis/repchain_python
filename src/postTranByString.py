@@ -13,7 +13,7 @@ import json
 import binascii
 import os
 
-import peer_pb2 as peer
+from src import peer_pb2 as peer
 
 
 class Client:
