@@ -1,5 +1,5 @@
 #基于的flask的Repchain后端
-目录结构:
+##目录结构:
 ```
 │  main.py  #主运行文件
 │  readme.md 
@@ -11,13 +11,13 @@
 │      121000005l35120456.node1.pem
 └─src
     │  back.py #与main.py功能相同 测试用
-    │  chaininfo.py #封装的请求接口以及返回值数据吃醋李
+    │  chaininfo.py #封装的请求接口以及返回值数据的处理
     │  peer_pb.py
     │  peer_pb2.py
     │  postTranByString.py #处理交易相关的代码
 ```
  
-使用库：
+##使用库：
 ```
 cryptography==37.0.4
 Flask==2.0.2
@@ -30,6 +30,13 @@ gevent
 
 
 ```
+##用法：
+在ide中运行：
+打开main.py，填写url、client_url。在app.run中指定后端运行ip和端口。不填写默认为127.0.0.1:5000。
+稳定运行：
+使用gunicorn和gevent，配置根目录下的gunicorn.conf.py文件。
+使用gunicorn main:app -c ./gunicorn.conf.py 命令运行
+
 
 ##chaininfo
 
@@ -122,3 +129,39 @@ class Client:
 ```
 
 ##main
+url=''#指定http请求的地址
+Client_url=''指定区块链的ip
+```
+get_chain_info():
+
+```
+获取区块链的基础信息
+```
+
+get_height():
+```
+通过高度获取区块链的信息
+```
+get_block_info():
+ 
+```
+测试代码，通过高度获取区块链的信息
+```
+
+
+upload_jks():
+
+        return "上传失败"
+
+        return "上传成功"
+
+#必须先执行upload_jks，才能执行submit_transinfo
+
+```
+接收前端上传的jks秘钥文件，并返回前端上传结果
+```
+submit_transinfo():
+   
+```
+
+把jks文件转换为pem文件，使用前端参数创建交易，并提交交易。
