@@ -10,11 +10,19 @@ from src import postTranByString as trans
 app = Flask(__name__)  # 在当前文件下创建应用
 
 cors = CORS(app)
-url='http://192.168.100.132:8081'
-Client_url='192.168.100.132:8081'
+# url='http://192.168.100.132:8081'
+# Client_url='192.168.100.132:8081'
+# 192.168.100.133:8081
+url=input('输入Repchain地址：')
+Client_url=url
+url='http://'+url
+
+
 
 jks_file_path=[]
-
+@app.route('/')
+def test():
+    return url
 @app.route("/chain_info",methods=["GET"])  # 装饰器，url，路由
 def get_chain_info():
     info=chaininfo.get_chain_info(url)
