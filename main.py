@@ -10,25 +10,46 @@ from src import postTranByString as trans
 app = Flask(__name__)  # 在当前文件下创建应用
 
 cors = CORS(app)
+def load_config():
+    f=open('config.ini','r')
+    content=f.read()
+    info=json.loads(content)
+    ip=info['Repchain']
+    port=info['port']
+    url='http://'+ip+':'+port
+    Client_url =ip+':'+port
+    return url,Client_url
+
 # url='http://192.168.100.132:8081'
 # Client_url='192.168.100.132:8081'
 # 192.168.100.133:8081
-url=input('输入Repchain地址：')
-Client_url=url
-url='http://'+url
+# flag=True
+# while flag:
+#     url=input('输入Repchain地址：')
+#     Client_url=url
+#     url_http='http://'+url
+#     print(url)
+#     if url==None:
+#         flag=True
+#     else:
+#         flag=False
+
 
 
 
 jks_file_path=[]
 @app.route('/')
 def test():
+    url,Client_url=load_config()
     return url
 @app.route("/chain_info",methods=["GET"])  # 装饰器，url，路由
 def get_chain_info():
+    url, Client_url = load_config()
     info=chaininfo.get_chain_info(url)
     return jsonify(eval(info.content))
 @app.route('/height',methods=["GET","POST"])
 def get_height():
+    url, Client_url = load_config()
     data=request.get_json()
     # print(data)
     info = chaininfo.get_block_info_by_height(url, data['height'])
@@ -37,6 +58,7 @@ def get_height():
 
 @app.route('/blockinfo',methods=["GET"])
 def get_block_info():
+    url, Client_url = load_config()
     info=chaininfo.get_block_info_by_height(url,2)
     res=chaininfo.block_info_process(info)
     # print(info)
@@ -44,6 +66,7 @@ def get_block_info():
 
 @app.route('/upload_jks',methods=["POST"])
 def upload_jks():
+    url, Client_url = load_config()
     data=request.files['file']#接受传来的jks文件
     if data is None:
         return "上传失败"
@@ -59,6 +82,7 @@ def upload_jks():
 #必须先执行upload_jks，才能执行submit_transinfo
 @app.route('/submit_transinfo',methods=["POST"])
 def submit_transinfo():
+    url, Client_url = load_config()
     # global jks_file_path
     data=request.get_json()#接收表单的信息
     # print(data)
