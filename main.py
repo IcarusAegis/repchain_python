@@ -74,9 +74,9 @@ def upload_jks():
         name=data.filename
         print(data)
         # global jks_file_path
-        jks_file_path.append(str('../certs/'+name))
+        jks_file_path.append(str('./certs/'+name))
         print('jks_file_path',jks_file_path)
-        data.save(r'../certs/'+name)
+        data.save(r'./certs/'+name)
         return "上传成功"
 
 #必须先执行upload_jks，才能执行submit_transinfo
