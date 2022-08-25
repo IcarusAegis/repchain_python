@@ -80,7 +80,7 @@ def args_info_process(data):
         return 'error'
 
 def convert_jks2pem(jks_path,password):
-    file_path=str(r'../certs/'+Path(jks_path).stem+".pem")
+    file_path=str(r'./certs/'+Path(jks_path).stem+".pem")
     f = open(file_path, 'a', encoding="utf-8")
     f.seek(0)
     f.truncate()
