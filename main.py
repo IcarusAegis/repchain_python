@@ -1,6 +1,7 @@
 import json
 import pathlib
 
+import requests
 from flask import Flask, render_template, request, jsonify
 from src import chaininfo
 from src import peer_pb2
@@ -141,8 +142,23 @@ def submit_transinfo():
     print('jks_file_path', jks_file_path)
 #jks转换pem没问题了
 #8.11做jks页面上的上传和密码填写
+@app.route('/submit_api_login',methods=["POST"])
+def submit_api_login():
+    data=request.get_json()
+    print(data)
+    url='http://chain.repchain.net.cn/uct/api/v1/gateway/login'
+    res=requests.post(url=url,json=data)
+    print(res.json())
+    return res.json()
 
-
+@app.route('/submit_api_register',methods=["POST"])
+def submit_api_register():
+    data=request.get_json()
+    print(data)
+    url='http://chain.repchain.net.cn/uct/api/v1/data/api_register'
+    res=requests.post(url=url,json=data)
+    # print(res.json())
+    return res.json()
 if __name__ == "__main__":
     app.run(debug=True)  # 运行app
 
