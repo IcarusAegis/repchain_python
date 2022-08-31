@@ -156,8 +156,8 @@ def submit_api_register():
     data=request.get_json()
     print(data)
     url='http://chain.repchain.net.cn/uct/api/v1/data/api_register'
-    res=requests.post(url=url,json=data)
-    # print(res.json())
+    res=requests.post(url=url,data=data)
+    print(res.json())
     return res.json()
 
 @app.route('/submit_jks_download',methods=["POST"])
@@ -165,7 +165,16 @@ def submit_jks_download():
     data=request.get_json()
     print(data)
     url='http://chain.repchain.net.cn/uct/api/v1/data/jks_download'
-    res=requests.post(url=url,json=data)
+    res=requests.post(url=url,data=data)
+    print(res.json())
+    return res.json()
+
+@app.route('/submit_chain',methods=["POST"])
+def submit_chain():
+    data=request.get_json()
+    print(data)
+    url='http://chain.repchain.net.cn/uct/api/v1/data/oper_chain'
+    res=requests.post(url=url,data=data)
     print(res.json())
     return res.json()
 
