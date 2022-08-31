@@ -159,6 +159,16 @@ def submit_api_register():
     res=requests.post(url=url,json=data)
     # print(res.json())
     return res.json()
+
+@app.route('/submit_jks_download',methods=["POST"])
+def submit_jks_download():
+    data=request.get_json()
+    print(data)
+    url='http://chain.repchain.net.cn/uct/api/v1/data/jks_download'
+    res=requests.post(url=url,json=data)
+    print(res.json())
+    return res.json()
+
 if __name__ == "__main__":
     app.run(debug=True)  # 运行app
 
