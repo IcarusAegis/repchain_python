@@ -127,7 +127,7 @@ def submit_transinfo():
     client=trans.Client(host=Client_url,pem_path=pem_path,credit_code=credit_code,cert_name=credit_name,password=None)#选择证书地址等 问题 密码加密
     tran_info=client.create_trans_invoke(data['trans_id'],data['chaincode_name'],data['chaincode_ver'],data['func_name'],json.dumps(args))#创建交易信息
     # print(tran_info)
-    res=client.postTranByString(tran_info)
+    res,data_hex=client.postTranByString(tran_info)
     # print(res.json().keys())
     if 'err' in dict(res.json()).keys():
         print('err',res.json()['err'])
@@ -177,6 +177,37 @@ def submit_chain():
     res=requests.post(url=url,data=data)
     print(res.json())
     return res.json()
+
+@app.route('/create_trasn_data',methods=["POST"])
+def create_trasn_data():
+    url, Client_url = load_config()
+    # global jks_file_path
+    data=request.get_json()#接收表单的信息
+    # print(data)
+    args=chaininfo.args_info_process(data)#获取交易参数
+    # print(args)
+    # print(data['password'])
+    print('jks_file_path', jks_file_path[0])
+    pem_path=chaininfo.convert_jks2pem(jks_file_path[0],data['password'])#转换jks文件到pem文件
+    credit_code,credit_name=pathlib.Path(pem_path).stem.split('.')#从pem文件名中提取信息
+
+    client=trans.Client(host=Client_url,pem_path=pem_path,credit_code=credit_code,cert_name=credit_name,password=None)#选择证书地址等 问题 密码加密
+    tran_info=client.create_trans_invoke(data['trans_id'],data['chaincode_name'],data['chaincode_ver'],data['func_name'],json.dumps(args))#创建交易信息
+    # print(tran_info)
+    res,data_hex=client.postTranByString(tran_info)
+    return data_hex
+    # print(res.json().keys())
+    # if 'err' in dict(res.json()).keys():
+    #     print('err',res.json()['err'])
+    #     return res.json()['err']
+    # #写错误返回值的提醒
+    # if (args=='error'):
+    #     flag='error'
+    #     return flag
+    # else:
+    #     return 'success'
+    jks_file_path.pop(0)
+    # print('jks_file_path', jks_file_path)
 
 if __name__ == "__main__":
     app.run(debug=True)  # 运行app

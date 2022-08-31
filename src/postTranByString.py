@@ -149,7 +149,8 @@ class Client:
         # data类型为byte(bin),先转换成byte(hex),再转换成string(hex)
         data = binascii.hexlify(data.SerializeToString())
         jsonObject = self.doPost(url, data.decode('utf-8'))
-        return jsonObject;
+        print('data:',data)
+        return jsonObject,data;
 
     # 从交易id得到交易内容
     def getTransById(self, tx_id):
